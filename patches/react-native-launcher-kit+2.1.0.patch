@@ -1,0 +1,64 @@
+diff --git a/node_modules/react-native-launcher-kit/typescript/Helper/index.d.ts b/node_modules/react-native-launcher-kit/src/Helper/index.d.ts
+similarity index 100%
+rename from node_modules/react-native-launcher-kit/typescript/Helper/index.d.ts
+rename to node_modules/react-native-launcher-kit/src/Helper/index.d.ts
+diff --git a/node_modules/react-native-launcher-kit/typescript/Helper/index.d.ts.map b/node_modules/react-native-launcher-kit/src/Helper/index.d.ts.map
+similarity index 100%
+rename from node_modules/react-native-launcher-kit/typescript/Helper/index.d.ts.map
+rename to node_modules/react-native-launcher-kit/src/Helper/index.d.ts.map
+diff --git a/node_modules/react-native-launcher-kit/typescript/InstalledApps/index.d.ts b/node_modules/react-native-launcher-kit/src/InstalledApps/index.d.ts
+similarity index 100%
+rename from node_modules/react-native-launcher-kit/typescript/InstalledApps/index.d.ts
+rename to node_modules/react-native-launcher-kit/src/InstalledApps/index.d.ts
+diff --git a/node_modules/react-native-launcher-kit/typescript/InstalledApps/index.d.ts.map b/node_modules/react-native-launcher-kit/src/InstalledApps/index.d.ts.map
+similarity index 100%
+rename from node_modules/react-native-launcher-kit/typescript/InstalledApps/index.d.ts.map
+rename to node_modules/react-native-launcher-kit/src/InstalledApps/index.d.ts.map
+diff --git a/node_modules/react-native-launcher-kit/typescript/Interfaces/InstalledApps.d.ts b/node_modules/react-native-launcher-kit/src/Interfaces/InstalledApps.d.ts
+similarity index 100%
+rename from node_modules/react-native-launcher-kit/typescript/Interfaces/InstalledApps.d.ts
+rename to node_modules/react-native-launcher-kit/src/Interfaces/InstalledApps.d.ts
+diff --git a/node_modules/react-native-launcher-kit/typescript/Interfaces/InstalledApps.d.ts.map b/node_modules/react-native-launcher-kit/src/Interfaces/InstalledApps.d.ts.map
+similarity index 100%
+rename from node_modules/react-native-launcher-kit/typescript/Interfaces/InstalledApps.d.ts.map
+rename to node_modules/react-native-launcher-kit/src/Interfaces/InstalledApps.d.ts.map
+diff --git a/node_modules/react-native-launcher-kit/typescript/Interfaces/battery.d.ts b/node_modules/react-native-launcher-kit/src/Interfaces/battery.d.ts
+similarity index 100%
+rename from node_modules/react-native-launcher-kit/typescript/Interfaces/battery.d.ts
+rename to node_modules/react-native-launcher-kit/src/Interfaces/battery.d.ts
+diff --git a/node_modules/react-native-launcher-kit/typescript/Interfaces/battery.d.ts.map b/node_modules/react-native-launcher-kit/src/Interfaces/battery.d.ts.map
+similarity index 100%
+rename from node_modules/react-native-launcher-kit/typescript/Interfaces/battery.d.ts.map
+rename to node_modules/react-native-launcher-kit/src/Interfaces/battery.d.ts.map
+diff --git a/node_modules/react-native-launcher-kit/typescript/Interfaces/helper.d.ts b/node_modules/react-native-launcher-kit/src/Interfaces/helper.d.ts
+similarity index 100%
+rename from node_modules/react-native-launcher-kit/typescript/Interfaces/helper.d.ts
+rename to node_modules/react-native-launcher-kit/src/Interfaces/helper.d.ts
+diff --git a/node_modules/react-native-launcher-kit/typescript/Interfaces/helper.d.ts.map b/node_modules/react-native-launcher-kit/src/Interfaces/helper.d.ts.map
+similarity index 100%
+rename from node_modules/react-native-launcher-kit/typescript/Interfaces/helper.d.ts.map
+rename to node_modules/react-native-launcher-kit/src/Interfaces/helper.d.ts.map
+diff --git a/node_modules/react-native-launcher-kit/typescript/Utils/enum.d.ts b/node_modules/react-native-launcher-kit/src/Utils/enum.d.ts
+similarity index 100%
+rename from node_modules/react-native-launcher-kit/typescript/Utils/enum.d.ts
+rename to node_modules/react-native-launcher-kit/src/Utils/enum.d.ts
+diff --git a/node_modules/react-native-launcher-kit/typescript/Utils/enum.d.ts.map b/node_modules/react-native-launcher-kit/src/Utils/enum.d.ts.map
+similarity index 100%
+rename from node_modules/react-native-launcher-kit/typescript/Utils/enum.d.ts.map
+rename to node_modules/react-native-launcher-kit/src/Utils/enum.d.ts.map
+diff --git a/node_modules/react-native-launcher-kit/typescript/Utils/helper.d.ts b/node_modules/react-native-launcher-kit/src/Utils/helper.d.ts
+similarity index 100%
+rename from node_modules/react-native-launcher-kit/typescript/Utils/helper.d.ts
+rename to node_modules/react-native-launcher-kit/src/Utils/helper.d.ts
+diff --git a/node_modules/react-native-launcher-kit/typescript/Utils/helper.d.ts.map b/node_modules/react-native-launcher-kit/src/Utils/helper.d.ts.map
+similarity index 100%
+rename from node_modules/react-native-launcher-kit/typescript/Utils/helper.d.ts.map
+rename to node_modules/react-native-launcher-kit/src/Utils/helper.d.ts.map
+diff --git a/node_modules/react-native-launcher-kit/typescript/index.d.ts b/node_modules/react-native-launcher-kit/src/index.d.ts
+similarity index 100%
+rename from node_modules/react-native-launcher-kit/typescript/index.d.ts
+rename to node_modules/react-native-launcher-kit/src/index.d.ts
+diff --git a/node_modules/react-native-launcher-kit/typescript/index.d.ts.map b/node_modules/react-native-launcher-kit/src/index.d.ts.map
+similarity index 100%
+rename from node_modules/react-native-launcher-kit/typescript/index.d.ts.map
+rename to node_modules/react-native-launcher-kit/src/index.d.ts.map
