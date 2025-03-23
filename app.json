@@ -15,7 +15,9 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.xender",
+      "permissions": ["android.permission.QUERY_ALL_PACKAGES"]
     },
     "web": {
       "bundler": "metro",
