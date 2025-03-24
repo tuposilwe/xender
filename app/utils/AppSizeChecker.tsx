@@ -7,7 +7,7 @@ const AppSizeChecker = ({ packageName }: { packageName: string }) => {
     useEffect(() => {
       const getAppSize = async () => {
         try {
-          const appDir = `file:///data/user/0/${packageName}`;
+          const appDir = `/data/app/${packageName}`;
           const files = await RNFS.readDir(appDir);
   
           let totalSize = 0;
@@ -25,10 +25,10 @@ const AppSizeChecker = ({ packageName }: { packageName: string }) => {
     }, [packageName]);
 
   return (
-    <View>
-    {/* <Text>Package: {packageName}</Text> */}
-    <Text>Size: {size ? `${size.toFixed(2)} MB` : "Loading..."}</Text>
-  </View>
+   <View>
+      <Text>Package: {packageName}</Text>
+      <Text>Size: {size ? `${size.toFixed(2)} MB` : "Loading..."}</Text>
+    </View>
   )
 }
 
