@@ -3,6 +3,8 @@ import { View, Pressable, Image, StyleSheet, Text } from "react-native";
 
 import { AppDetail } from "react-native-launcher-kit/typescript/Interfaces/InstalledApps";
 import LabelSummary from "../../utils/LabelSummary";
+import RNFS from "react-native-fs";
+import AppSizeChecker from "@/app/utils/AppSizeChecker";
 
 interface AppGridProps {
   apps: AppDetail[];
@@ -37,6 +39,7 @@ const AppGrid: React.FC<AppGridProps> = ({
           source={{ uri: `${item.icon}` }}
         />
         <LabelSummary text={item.label} />
+        <AppSizeChecker packageName={item.packageName}/>
       </Pressable>
     ))}
   </View>
