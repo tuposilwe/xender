@@ -39,7 +39,7 @@ const AppGrid: React.FC<AppGridProps> = ({
           source={{ uri: `${item.icon}` }}
         />
         <LabelSummary text={item.label} />
-        <AppSizeChecker packageName={item.packageName}/>
+        {/* <AppSizeChecker packageName={item.packageName}/> */}
       </Pressable>
     ))}
   </View>

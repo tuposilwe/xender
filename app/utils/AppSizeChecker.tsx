@@ -7,7 +7,7 @@ const AppSizeChecker = ({ packageName }: { packageName: string }) => {
     useEffect(() => {
       const getAppSize = async () => {
         try {
-          const appDir = `/data/app/${packageName}`;
+          const appDir = `/data/user/0/${packageName}`;
           const files = await RNFS.readDir(appDir);
   
           let totalSize = 0;

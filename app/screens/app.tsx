@@ -24,7 +24,31 @@ const App = () => {
           includeAccentColor: true,
         });
 
-        console.log("Installed apps: ", installedApps);
+
+      const appsWithSizes = await Promise.all(
+        apps.map(async (app) => {
+          const size = await InstalledApps.getAppStorageStats({ packageName: app.packageName});
+          const appsized = (size.appBytes/ (1024 * 1024)).toFixed(2) + "MB";
+
+          return { ...app, appsized };
+        })
+      );
+
+      const size = await InstalledApps.getAppStorageStats({ packageName: 'com.anonymous.xender'});
+      const appsized = (size.appBytes/ (1024 * 1024)).toFixed(2) + "MB";
+
+      console.log("Appsize: ",appsized);
+      
+
+      // InstalledApps.getAppStorageStats({ packageName: 'com.anonymous.xender'})
+      // .then(stats => {
+      //   console.log('App size:',`${(stats.appBytes/ (1024 * 1024)).toFixed(2)}MB`);
+      //   // console.log('Data size:', stats.dataBytes);
+      //   // console.log('Cache size:', stats.cacheBytes);
+      // })
+      // .catch(error => console.error(error));
+
+      // console.log("Installed apps: ", appsWithSizes);
         
         setApps(installedApps);
       } catch (error) {
