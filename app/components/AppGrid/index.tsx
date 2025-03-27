@@ -1,10 +1,7 @@
 import React from "react";
-import { View, Pressable, Image, StyleSheet, Text } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { AppDetail } from "react-native-launcher-kit/typescript/Interfaces/InstalledApps";
-import LabelSummary from "../../utils/LabelSummary";
-import RNFS from "react-native-fs";
-import AppSizeChecker from "@/app/utils/AppSizeChecker";
 
 interface AppGridProps {
   apps: AppDetail[];
@@ -38,8 +35,9 @@ const AppGrid: React.FC<AppGridProps> = ({
         ]}
           source={{ uri: `${item.icon}` }}
         />
-        <LabelSummary text={item.label} />
-        {/* <AppSizeChecker packageName={item.packageName}/> */}
+        <Text style={styles.appLabel} numberOfLines={1}>{item.label}</Text>
+        <Text style={styles.appSize}>{item.appBytes}</Text>
+   
       </Pressable>
     ))}
   </View>
@@ -51,25 +49,37 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent:"flex-start",
+    justifyContent:"center",
     flexWrap: "wrap",
     backgroundColor: "white",
+    marginTop:3
   },
   appIconContainer: {
+    width: 80,
+    height: 80,
     justifyContent: "center",
     alignItems: "center",
-    margin: 13,
-    backgroundColor: "#000",
-    borderRadius: 20,
-    width: 70,
+    borderRadius: 2,
+    margin:8,
     padding: 2,
-    height: 70,
-    // overflow: 'hidden',
   },
   appIcon:{
     width: "60%",
     height: "60%",
-    marginTop: "8%", 
-    resizeMode: "cover",
+    resizeMode: "cover", // prevents icon distortion
+  },
+  appLabel: {
+     marginTop: 4,
+     fontSize: 12,
+     fontWeight: "500",
+    color: "#333",
+    textAlign: "center",
+    maxWidth: "100%",
+  },
+  appSize: {
+    marginTop: 2,
+    fontSize: 10,
+    color: "#666",
+    textAlign: "center",
   },
 });
