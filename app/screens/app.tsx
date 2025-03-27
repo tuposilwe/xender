@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { InstalledApps, RNLauncherKitHelper } from "react-native-launcher-kit";
 import { AppDetail } from "react-native-launcher-kit/typescript/Interfaces/InstalledApps";
-import AppGrid from "../components/AppGrid";
+import AppGrid from "../../components/AppGrid";
 
 export interface AppState {
   showWithAccent: boolean;
