@@ -1,7 +1,7 @@
 import icons from "@/constants/icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
-import { Image, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import Profile from "../Profile";
 import Home from "../home";
 import Playlist from "./playlist";
@@ -12,25 +12,43 @@ const TabIcon = ({
   focused,
   icon,
   title,
+  isCenterTab = false,
 }: {
   focused: boolean;
   icon: any;
   title: string;
+  isCenterTab?: boolean;
 }) => (
-  <View className="flex-auto mt-2 flex-col items-center">
-    <Image
-      source={icon}
-      tintColor={focused ? "#066341" : "#666876"}
-      resizeMode="contain"
-      className={`${title == "" ? "size-9" : "size-6"} `}
-    />
-    <Text
-      className={`mt-2  text-xs  w-full mt-1${
-        focused ? "text-[#066341] font-medium" : "text-[#666876]"
-      }`}
-    >
-      {title}
-    </Text>
+  <View style={styles.tabIconContainer}>
+    {isCenterTab ? (
+      <View
+        style={[
+          styles.centerTabBackground,
+          focused && styles.centerTabBackgroundFocused,
+        ]}
+      >
+        <Image source={icon} style={styles.centerTabIcon} />
+      </View>
+    ) : (
+      <>
+        <Image
+          source={icon}
+          style={[
+            styles.tabIcon,
+            { tintColor: focused ? "#066341" : "#666876" },
+          ]}
+        />
+        <Text
+          style={[
+            styles.tabLabel,
+            focused ? styles.tabLabelActive : styles.tabLabelInactive,
+          ]}
+          numberOfLines={1}
+        >
+          {title}
+        </Text>
+      </>
+    )}
   </View>
 );
 
@@ -40,25 +58,11 @@ const TabLayout = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: "#066341",
-        tabBarInactiveTintColor: "gray",
-        tabBarStyle: {
-          backgroundColor: "#f8f9fa",
-          borderTopColor: "#0061FF1A",
-          borderTopWidth: 1,
-          paddingBottom: 5,
-          height: 60,
-        },
-        // headerShown: false,
-        headerStyle: {
-          //    height: 47,
-        },
-        headerTitleStyle: {
-          fontWeight: "bold",
-          fontSize: 20,
-          justifyContent: "center",
-          alignItems: "center",
-        },
+        tabBarShowLabel: false,
+        tabBarStyle: styles.tabBar,
+        headerStyle: styles.header,
+        headerTitleStyle: styles.headerTitle,
+        headerTitleAlign: "center",
       }}
     >
       <Tab.Screen
@@ -85,9 +89,13 @@ const TabLayout = () => {
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon icon={icons.shuffle} focused={focused} title="" />
+            <TabIcon
+              icon={icons.shuffle}
+              focused={focused}
+              title=""
+              isCenterTab={true}
+            />
           ),
-          tabBarShowLabel: false,
         }}
       />
       <Tab.Screen
@@ -111,5 +119,73 @@ const TabLayout = () => {
     </Tab.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  tabBar: {
+    backgroundColor: "#f8f9fa",
+    borderTopColor: "#0061FF1A",
+    borderTopWidth: 1,
+    height: 60,
+    paddingBottom: 0,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+  },
+  header: {
+    backgroundColor: "#ffffff",
+    elevation: 0,
+    shadowOpacity: 0,
+    borderBottomWidth: 0,
+  },
+  headerTitle: {
+    fontWeight: "bold",
+    fontSize: 20,
+    color: "#000",
+  },
+  tabIcon: {
+    width: 24,
+    height: 24,
+    marginBottom: 0,
+  },
+  tabLabel: {
+    fontSize: 12,
+    textAlign: "center",
+    marginTop: 2,
+  },
+  tabLabelActive: {
+    color: "#066341",
+    fontWeight: "600",
+  },
+  tabLabelInactive: {
+    color: "#666876",
+  },
+  centerTabBackground: {
+    width: 55,
+    height: 55,
+    borderRadius: 27.5,
+    backgroundColor: "#066341",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 5,
+    borderWidth: 3,
+    borderColor: "#f8f9fa",
+  },
+  centerTabBackgroundFocused: {
+    backgroundColor: "#044b33", // Slightly darker when focused
+  },
+  centerTabIcon: {
+    width: 28,
+    height: 28,
+    tintColor: "#fff",
+  },
+  tabIconContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: "100%",
+    width: 80,
+    marginTop: 25,
+  },
+});
 
 export default TabLayout;
