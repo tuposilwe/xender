@@ -1,12 +1,13 @@
-import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import {
+  AlertNotificationRoot
+} from "react-native-alert-notification";
 import {
   configureReanimatedLogger,
   ReanimatedLogLevel,
 } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
-
+import TabLayout from "./(tabs)/_layout";
 
 export default function RootLayout() {
   // This is the default configuration
@@ -19,7 +20,7 @@ export default function RootLayout() {
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar style="light" backgroundColor="#066341" />
       <AlertNotificationRoot>
-      <Stack screenOptions={{ headerShown: false }}  initialRouteName="index"/>
+        <TabLayout />
       </AlertNotificationRoot>
     </SafeAreaView>
   );

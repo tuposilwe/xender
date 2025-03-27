@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Alert,
-  Pressable,
-  StyleSheet,
-  Text
-} from "react-native";
+import { Alert, Pressable, StyleSheet, Text } from "react-native";
 import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
 import App from "./screens/app";
 import Download from "./screens/download";
@@ -53,7 +48,6 @@ const Home = () => {
           indicatorStyle={{ backgroundColor: "#f1fcfc" }}
           style={{ backgroundColor: "#066341" }}
           tabStyle={{ width: "auto" }}
-
         />
       )}
     >
@@ -97,16 +91,6 @@ const Home = () => {
 };
 
 const styles = StyleSheet.create({
-  box: {
-    height: 250,
-    width: "100%",
-  },
-  boxA: {
-    backgroundColor: "white",
-  },
-  boxB: {
-    backgroundColor: "#D8D8D8",
-  },
   header: {
     width: "100%",
     backgroundColor: "#066341",

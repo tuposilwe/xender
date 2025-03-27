@@ -33,6 +33,7 @@ const App = () => {
             // Check again after requesting
             const newPermissionStatus =
               await InstalledApps.checkStoragePermissions();
+            setIsLoading(true);
             if (!newPermissionStatus) {
               throw new Error("User denied storage permissions");
             }

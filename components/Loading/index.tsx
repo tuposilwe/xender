@@ -5,7 +5,7 @@ import {styles} from './styles';
 
 const Loading: React.FC<LoadingProps> = ({message = 'Loading Apps...'}) => (
   <View style={styles.container}>
-    <ActivityIndicator size="large" color="#9261E2" />
+    <ActivityIndicator size="large" color="#066341" />
     <Text style={styles.text}>{message}</Text>
   </View>
 );
