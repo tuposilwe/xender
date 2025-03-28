@@ -1,7 +1,15 @@
 import icons from "@/constants/icons";
+import Feather from "@expo/vector-icons/Feather";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import React, { useRef } from "react";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 import Profile from "../Profile";
 import Home from "../home";
 import Playlist from "./playlist";
@@ -52,8 +60,34 @@ const TabIcon = ({
   </View>
 );
 
+const DURATION = 200;
+const TRANSLATE_Y = -100;
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
 const TabLayout = () => {
   const Tab = createBottomTabNavigator();
+  const isOpened = useRef(false);
+  const transYSend = useSharedValue(0);
+  const transYUpload = useSharedValue(0);
+  const rSendAnimatedStyles = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateY: transYSend.value },
+
+        { scale: interpolate(transYSend.value, [TRANSLATE_Y, 0], [1, 0]) },
+      ],
+    };
+  }, []);
+
+  const rDownloadAnimatedStyles = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateY: transYSend.value },
+
+        { scale: interpolate(transYSend.value, [TRANSLATE_Y, 0], [1, 0]) },
+      ],
+    };
+  }, []);
 
   return (
     <Tab.Navigator
@@ -64,6 +98,7 @@ const TabLayout = () => {
         headerTitleStyle: styles.headerTitle,
         headerTitleAlign: "center",
       }}
+      initialRouteName="index"
     >
       <Tab.Screen
         name="PLAYLIST"
@@ -84,17 +119,56 @@ const TabLayout = () => {
         }}
       />
       <Tab.Screen
-        name="Home"
+        name="index"
+        listeners={({ navigation }) => ({
+          focus: () => navigation.jumpTo("index"),
+          tabPress: (e) => {
+            navigation.jumpTo("index");
+
+            if (isOpened.current) {
+              transYSend.value = withTiming(0, {
+                duration: DURATION,
+              });
+            } else {
+              transYSend.value = withTiming(TRANSLATE_Y, {
+                duration: DURATION,
+              });
+              transYUpload.value = withTiming(TRANSLATE_Y, {
+                duration: DURATION,
+              });
+            }
+
+            isOpened.current = !isOpened.current;
+
+            console.log("Hey, Pal");
+
+            e.preventDefault();
+          },
+        })}
         component={Home}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon
-              icon={icons.shuffle}
-              focused={focused}
-              title=""
-              isCenterTab={true}
-            />
+            <>
+              <TabIcon
+                icon={icons.shuffle}
+                focused={focused}
+                title=""
+                isCenterTab={true}
+              />
+              <AnimatedPressable
+                style={[styles.sendButton, rSendAnimatedStyles]}
+              >
+                <Feather name="send" size={28} color="white" />
+                <Text style={{ color: "white", marginLeft: 5 }}>SEND</Text>
+              </AnimatedPressable>
+              <AnimatedPressable
+                style={[styles.dowloadButton, rDownloadAnimatedStyles]}
+              >
+                <FontAwesome name="download" size={28} color="white" />
+                <Text style={{ color: "white", marginLeft: 5 }}>RECEIVE</Text>
+              </AnimatedPressable>
+            </>
           ),
         }}
       />
@@ -161,7 +235,7 @@ const styles = StyleSheet.create({
     color: "#666876",
   },
   centerTabBackground: {
-    width: 55,
+    width: 70,
     height: 55,
     borderRadius: 27.5,
     backgroundColor: "#066341",
@@ -185,6 +259,34 @@ const styles = StyleSheet.create({
     height: "100%",
     width: 80,
     marginTop: 25,
+  },
+  sendButton: {
+    flexDirection: "row",
+    width: 90,
+    height: 50,
+    padding: 9,
+    backgroundColor: "#066341",
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    left: -89,
+    zIndex: -1,
+  },
+  dowloadButton: {
+    flexDirection: "row",
+    width: 110,
+    height: 50,
+    padding: 9,
+    backgroundColor: "#066341",
+    borderRadius: 30,
+    // borderWidth: 4,
+    // borderColor: "#f4fdfd",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    left: 20,
+    zIndex: -1,
   },
 });
 
