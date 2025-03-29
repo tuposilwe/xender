@@ -104,13 +104,11 @@ const App = () => {
     return <Loading />;
   }
 
+  // const selectedAppDetails = apps.filter(app => selectedApps.includes(app.packageName));
+
   return (
     <View className="flex items-center justify-center">
-      <AppGrid
-        apps={apps}
-        showWithAccent={false}
-        onAppPress={handlers.openApplication}
-      />
+      <AppGrid apps={apps} />
     </View>
   );
 };

@@ -1,47 +1,67 @@
-import React from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-
+import React, { useState } from "react";
+import { Alert, Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { AppDetail } from "react-native-launcher-kit/typescript/Interfaces/InstalledApps";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 interface AppGridProps {
   apps: AppDetail[];
-  showWithAccent: boolean;
-  onAppPress: (packageName: string) => void;
 }
 
-const AppGrid: React.FC<AppGridProps> = ({
-  apps,
-  showWithAccent,
-  onAppPress,
-}) => (
-  <View style={styles.container}>
-    {apps.map((item) => (
-      <Pressable
-        key={item.packageName}
-        onPress={() => onAppPress(item.packageName)}
-        style={[
-          styles.appIconContainer,
-          {
-            backgroundColor: showWithAccent
-              ? `${item.accentColor}`
-              : "transparent",
-          },
-        ]}
-      >
-        <Image
-          style={[
-            styles.appIcon,
-           showWithAccent && {transform: [{scale: 0.7}]},
-        ]}
-          source={{ uri: `${item.icon}` }}
-        />
-        <Text style={styles.appLabel} numberOfLines={1}>{item.label}</Text>
-        <Text style={styles.appSize}>{item.appBytes}</Text>
-   
-      </Pressable>
-    ))}
-  </View>
-);
+const AppGrid = ({ apps }: AppGridProps) => {
+  const [selectedApps, setSelectedApps] = useState<string[]>([]); // Track multiple selected apps
+
+  const toggleAppSelection = (packageName: string) => {
+    setSelectedApps((prevSelected) => {
+      if (prevSelected.includes(packageName)) {
+        // Deselect if already selected
+        return prevSelected.filter((pkg) => pkg !== packageName);
+      } else {
+        // Select new app
+        return [...prevSelected, packageName];
+      }
+    });
+  };
+
+  return (
+    <View style={styles.container}>
+      {apps.map((item) => (
+        <Pressable
+          key={item.packageName}
+          onPress={() => toggleAppSelection(item.packageName)}
+          style={[styles.appIconContainer]}
+        >
+          <View style={styles.imageCard}>
+            {selectedApps.includes(item.packageName) && (
+              <>
+                <View style={styles.shadowAb} />
+                <MaterialIcons
+                  name="check-circle"
+                  size={20}
+                  color="green"
+                  style={{
+                    position: "absolute",
+                    top: -7,
+                    right: -7,
+                  }}
+                />
+              </>
+            )}
+
+            <Image
+              style={[styles.appIcon, { transform: [{ scale: 0.7 }] }]}
+              source={{ uri: `${item.icon}` }}
+            />
+          </View>
+
+          <Text style={styles.appLabel} numberOfLines={1}>
+            {item.label}
+          </Text>
+          <Text style={styles.appSize}>{item.appBytes}</Text>
+        </Pressable>
+      ))}
+    </View>
+  );
+};
 
 export default AppGrid;
 
@@ -49,10 +69,10 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent:"center",
+    justifyContent: "center",
     flexWrap: "wrap",
     backgroundColor: "white",
-    marginTop:3
+    marginTop: 3,
   },
   appIconContainer: {
     width: 80,
@@ -60,18 +80,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 2,
-    margin:8,
+    margin: 8,
     padding: 2,
   },
-  appIcon:{
-    width: "60%",
-    height: "60%",
-    resizeMode: "cover", // prevents icon distortion
-  },
   appLabel: {
-     marginTop: 4,
-     fontSize: 12,
-     fontWeight: "500",
+    marginTop: 4,
+    fontSize: 12,
+    fontWeight: "500",
     color: "#333",
     textAlign: "center",
     maxWidth: "100%",
@@ -81,5 +96,32 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#666",
     textAlign: "center",
+  },
+  imageCard: {
+    width: 70,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
+  },
+  shadowAb: {
+    position: "absolute",
+    top: -7,
+    left: 0,
+    right: 0,
+    height: 90,
+    width: "120%",
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 0.1,
+    elevation: 0.1,
+    zIndex: 2,
+  },
+  appIcon: {
+    width: 42,
+    height: 40,
+    resizeMode: "cover",
   },
 });
