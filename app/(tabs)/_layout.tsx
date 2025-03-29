@@ -3,7 +3,7 @@ import Feather from "@expo/vector-icons/Feather";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useRef } from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -140,8 +140,6 @@ const TabLayout = () => {
 
             isOpened.current = !isOpened.current;
 
-            console.log("Hey, Pal");
-
             e.preventDefault();
           },
         })}
@@ -158,12 +156,18 @@ const TabLayout = () => {
               />
               <AnimatedPressable
                 style={[styles.sendButton, rSendAnimatedStyles]}
+                onPress={() => {
+                  Alert.alert("Sending!", "You Clicked Send");
+                }}
               >
                 <Feather name="send" size={28} color="white" />
                 <Text style={{ color: "white", marginLeft: 5 }}>SEND</Text>
               </AnimatedPressable>
               <AnimatedPressable
                 style={[styles.dowloadButton, rDownloadAnimatedStyles]}
+                onPress={() => {
+                  Alert.alert("Download", "You Clicked Download");
+                }}
               >
                 <FontAwesome name="download" size={28} color="white" />
                 <Text style={{ color: "white", marginLeft: 5 }}>RECEIVE</Text>
