@@ -120,8 +120,8 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   appIcon: {
-    width: 42,
-    height: 40,
+    width: 62,
+    height: 60,
     resizeMode: "cover",
   },
 });
