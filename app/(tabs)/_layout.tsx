@@ -2,8 +2,18 @@ import icons from "@/constants/icons";
 import Feather from "@expo/vector-icons/Feather";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React, { useRef } from "react";
-import { Alert, Image, Pressable, StyleSheet, Text, View } from "react-native";
+import React, { useRef, useState } from "react";
+import {
+  Alert,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import Entypo from "@expo/vector-icons/Entypo";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -15,6 +25,8 @@ import Home from "../home";
 import Playlist from "./playlist";
 import Social from "./social";
 import Tomp3 from "./tomp3";
+import useSelectedApps from "@/hooks/useSelectedApps";
+import { useLocalSearchParams } from "expo-router";
 
 const TabIcon = ({
   focused,
@@ -65,6 +77,8 @@ const TRANSLATE_Y = -100;
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const TabLayout = () => {
+  const [screen, setScreen] = useState(false);
+
   const Tab = createBottomTabNavigator();
   const isOpened = useRef(false);
   const transYSend = useSharedValue(0);
@@ -89,11 +103,134 @@ const TabLayout = () => {
     };
   }, []);
 
-  return (
+  return screen ? (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarStyle: {
+          alignContent: "center",
+          justifyContent: "space-around",
+          flexDirection: "row",
+        },
+        tabBarShowLabel: false,
+        headerShown: false,
+        headerStyle: styles.header,
+        headerTitleStyle: styles.headerTitle,
+        headerTitleAlign: "center",
+      })}
+      initialRouteName="index"
+    >
+      <Tab.Screen
+        name="CANCEL"
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            // navigation.jumpTo("index");
+            Alert.alert("Hey Pal", "It's Me Again");
+
+            e.preventDefault();
+          },
+        })}
+        component={Playlist}
+        options={({ route }) => ({
+          tabBarIcon: () => (
+            <TouchableOpacity
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+                width: "100%",
+                marginTop: 10,
+                marginRight: 70,
+              }}
+              onPress={() => console.log("Hey Pal")}
+            >
+              <Entypo name="cross" size={35} color="#9c9696" />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+
+      <Tab.Screen
+        name="index"
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            // navigation.jumpTo("index");
+            Alert.alert("Hey Pal", "It's Not Me ");
+
+            e.preventDefault();
+          },
+        })}
+        component={Home}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+                width: "100%",
+                marginTop: 15,
+              }}
+            >
+              <View
+                style={{
+                  borderRadius: 9,
+                  width: 120,
+                  height: 45,
+                  backgroundColor: "#08723d",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 15,
+                    textAlign: "center",
+                    marginTop: 2,
+                    fontWeight: "bold",
+                    color: "white",
+                  }}
+                >
+                  SEND
+                </Text>
+              </View>
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="DELETE"
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            // navigation.jumpTo("index");
+            Alert.alert("Hey Pal", "It's Your Turn");
+
+            e.preventDefault();
+          },
+        })}
+        component={Tomp3}
+        options={{
+          tabBarIcon: () => (
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+                width: "100%",
+                marginTop: 10,
+                marginLeft: 65,
+              }}
+            >
+              <FontAwesome5 name="trash" size={24} color="#9c9696" />
+            </View>
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  ) : (
     <Tab.Navigator
       screenOptions={{
         tabBarShowLabel: false,
-        tabBarStyle: styles.tabBar,
+        tabBarStyle: [styles.tabBar],
         headerStyle: styles.header,
         headerTitleStyle: styles.headerTitle,
         headerTitleAlign: "center",

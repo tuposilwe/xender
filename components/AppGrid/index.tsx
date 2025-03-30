@@ -2,13 +2,19 @@ import React, { useState } from "react";
 import { Alert, Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { AppDetail } from "react-native-launcher-kit/typescript/Interfaces/InstalledApps";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import useSelectedApps from "@/hooks/useSelectedApps";
+import {
+  router,
+  useGlobalSearchParams,
+  useLocalSearchParams,
+} from "expo-router";
 
 interface AppGridProps {
   apps: AppDetail[];
 }
 
 const AppGrid = ({ apps }: AppGridProps) => {
-  const [selectedApps, setSelectedApps] = useState<string[]>([]); // Track multiple selected apps
+  const { selectedApps, setSelectedApps } = useSelectedApps();
 
   const toggleAppSelection = (packageName: string) => {
     setSelectedApps((prevSelected) => {
