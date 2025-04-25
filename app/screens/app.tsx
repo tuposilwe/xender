@@ -1,5 +1,5 @@
 import Loading from "@/components/Loading";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { View } from "react-native";
 import { InstalledApps, RNLauncherKitHelper } from "react-native-launcher-kit";
 import { AppDetail } from "react-native-launcher-kit/typescript/Interfaces/InstalledApps";
@@ -93,6 +93,8 @@ const App = () => {
     initApp();
   }, []);
 
+  const memoizedApps = useMemo(() => apps, [apps]);
+
   //App lauch handlers
   const handlers = {
     openApplication: (packageName: string) => {
@@ -108,7 +110,7 @@ const App = () => {
 
   return (
     <View className="flex items-center justify-center">
-      <AppGrid apps={apps} />
+      <AppGrid apps={memoizedApps} />
     </View>
   );
 };
