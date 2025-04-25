@@ -1,32 +1,42 @@
-import React, { useState } from "react";
-import { Alert, Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { AppDetail } from "react-native-launcher-kit/typescript/Interfaces/InstalledApps";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import useSelectedApps from "@/hooks/useSelectedApps";
-import {
-  router,
-  useGlobalSearchParams,
-  useLocalSearchParams,
-} from "expo-router";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import React, { useEffect } from "react";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { AppDetail } from "react-native-launcher-kit/typescript/Interfaces/InstalledApps";
 
 interface AppGridProps {
   apps: AppDetail[];
 }
 
 const AppGrid = ({ apps }: AppGridProps) => {
-  const { selectedApps, setSelectedApps } = useSelectedApps();
+  const { selectedApps,setScreen } = useSelectedApps();
 
-  const toggleAppSelection = (packageName: string) => {
-    setSelectedApps((prevSelected) => {
-      if (prevSelected.includes(packageName)) {
-        // Deselect if already selected
-        return prevSelected.filter((pkg) => pkg !== packageName);
-      } else {
-        // Select new app
-        return [...prevSelected, packageName];
-      }
-    });
+  useEffect(() => {
+    setScreen(selectedApps.length > 0);
+  }, [selectedApps]);
+ 
+
+  const isEmpty = () => {
+    selectedApps.length === 0 ? setScreen(false) : setScreen(true);
   };
+
+  // console.log("STATE ",screen);
+  
+  const toggleAppSelection = (packageName: string) => {
+    const { selectedApps, setSelectedApps, setScreen } = useSelectedApps.getState();
+  
+    let updatedSelection: string[];
+  
+    if (selectedApps.includes(packageName)) {
+      updatedSelection = selectedApps.filter((pkg) => pkg !== packageName);
+    } else {
+      updatedSelection = [...selectedApps, packageName];
+    }
+  
+    setSelectedApps(updatedSelection);
+    setScreen(updatedSelection.length > 0); // Update modal visibility
+  };
+  
 
   return (
     <View style={styles.container}>

@@ -1,8 +1,11 @@
 import icons from "@/constants/icons";
+import useSelectedApps from "@/hooks/useSelectedApps";
+import Entypo from "@expo/vector-icons/Entypo";
 import Feather from "@expo/vector-icons/Feather";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import {
   Alert,
   Image,
@@ -12,10 +15,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import Entypo from "@expo/vector-icons/Entypo";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { Portal } from "react-native-paper";
 import Animated, {
   interpolate,
+  SlideInDown,
+  SlideOutDown,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
@@ -25,8 +29,6 @@ import Home from "../home";
 import Playlist from "./playlist";
 import Social from "./social";
 import Tomp3 from "./tomp3";
-import useSelectedApps from "@/hooks/useSelectedApps";
-import { useLocalSearchParams } from "expo-router";
 
 const TabIcon = ({
   focused,
@@ -77,7 +79,7 @@ const TRANSLATE_Y = -100;
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const TabLayout = () => {
-  const [screen, setScreen] = useState(false);
+  const { selectedApps, screen, setSelectedApps } = useSelectedApps();
 
   const Tab = createBottomTabNavigator();
   const isOpened = useRef(false);
@@ -87,90 +89,165 @@ const TabLayout = () => {
     return {
       transform: [
         { translateY: transYSend.value },
-
         { scale: interpolate(transYSend.value, [TRANSLATE_Y, 0], [1, 0]) },
       ],
     };
   }, []);
 
-  const rDownloadAnimatedStyles = useAnimatedStyle(() => {
+  const rReceiveAnimatedStyles = useAnimatedStyle(() => {
     return {
       transform: [
         { translateY: transYSend.value },
-
         { scale: interpolate(transYSend.value, [TRANSLATE_Y, 0], [1, 0]) },
       ],
     };
   }, []);
 
-  return screen ? (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarStyle: {
-          alignContent: "center",
-          justifyContent: "space-around",
-          flexDirection: "row",
-        },
-        tabBarShowLabel: false,
-        headerShown: false,
-        headerStyle: styles.header,
-        headerTitleStyle: styles.headerTitle,
-        headerTitleAlign: "center",
-      })}
-      initialRouteName="index"
-    >
-      <Tab.Screen
-        name="CANCEL"
-        listeners={({ navigation }) => ({
-          tabPress: (e) => {
-            // navigation.jumpTo("index");
-            Alert.alert("Hey Pal", "It's Me Again");
+  return (
+    <>
+      <Tab.Navigator
+        screenOptions={{
+          tabBarShowLabel: false,
+          tabBarStyle: [styles.tabBar, screen && { display: "none" }],
+          headerStyle: styles.header,
+          headerTitleStyle: styles.headerTitle,
+          headerTitleAlign: "center",
+        }}
+        initialRouteName="index"
+      >
+        <Tab.Screen
+          name="PLAYLIST"
+          component={Playlist}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <TabIcon
+                icon={icons.playlist}
+                focused={focused}
+                title="PLAYLIST"
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="TOMP3"
+          component={Tomp3}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <TabIcon icon={icons.toMp3} focused={focused} title="TOMP3" />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="index"
+          listeners={({ navigation }) => ({
+            focus: () => navigation.jumpTo("index"),
+            tabPress: (e) => {
+              navigation.jumpTo("index");
 
-            e.preventDefault();
-          },
-        })}
-        component={Playlist}
-        options={({ route }) => ({
-          tabBarIcon: () => (
-            <TouchableOpacity
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                height: "100%",
-                width: "100%",
-                marginTop: 10,
-                marginRight: 70,
-              }}
-              onPress={() => console.log("Hey Pal")}
-            >
-              <Entypo name="cross" size={35} color="#9c9696" />
-            </TouchableOpacity>
-          ),
-        })}
-      />
+              if (isOpened.current) {
+                // Close animations
+                transYSend.value = withTiming(0, { duration: DURATION });
+                transYUpload.value = withTiming(0, { duration: DURATION });
+              } else {
+                // Open animations
+                transYSend.value = withTiming(TRANSLATE_Y, {
+                  duration: DURATION,
+                });
+                transYUpload.value = withTiming(TRANSLATE_Y, {
+                  duration: DURATION,
+                });
 
-      <Tab.Screen
-        name="index"
-        listeners={({ navigation }) => ({
-          tabPress: (e) => {
-            // navigation.jumpTo("index");
-            Alert.alert("Hey Pal", "It's Not Me ");
+                // Auto-close after 2 seconds
+                setTimeout(() => {
+                  if (isOpened.current) {
+                    transYSend.value = withTiming(0, { duration: DURATION });
+                    transYUpload.value = withTiming(0, { duration: DURATION });
+                    isOpened.current = false;
+                  }
+                }, 3000);
+              }
 
-            e.preventDefault();
-          },
-        })}
-        component={Home}
-        options={{
-          tabBarIcon: ({ focused }) => (
+              isOpened.current = !isOpened.current;
+              e.preventDefault();
+            },
+          })}
+          component={Home}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ focused }) => (
+              <>
+                <TabIcon
+                  icon={icons.shuffle}
+                  focused={focused}
+                  title=""
+                  isCenterTab={true}
+                />
+                <AnimatedPressable
+                  style={[styles.sendButton, rSendAnimatedStyles]}
+                  onPress={() => {
+                    Alert.alert("Sending!", "You Clicked Send");
+                  }}
+                >
+                  <Feather name="send" size={28} color="white" />
+                  <Text style={{ color: "white", marginLeft: 5 }}>SEND</Text>
+                </AnimatedPressable>
+                <AnimatedPressable
+                  style={[styles.dowloadButton, rReceiveAnimatedStyles]}
+                  onPress={() => {
+                    Alert.alert("Download", "You Clicked Download");
+                  }}
+                >
+                  <FontAwesome name="download" size={28} color="white" />
+                  <Text style={{ color: "white", marginLeft: 5 }}>RECEIVE</Text>
+                </AnimatedPressable>
+              </>
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="SOCIAL"
+          component={Social}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <TabIcon icon={icons.social} focused={focused} title="SOCIAL" />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="ME"
+          component={Profile}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <TabIcon icon={icons.profile} focused={focused} title="ME" />
+            ),
+          }}
+        />
+      </Tab.Navigator>
+
+      {selectedApps.length > 0 && (
+        <Portal>
+          <Animated.View
+            entering={SlideInDown}
+            exiting={SlideOutDown}
+            style={[styles.sliderModal]}
+          >
             <View
               style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
                 alignItems: "center",
-                justifyContent: "center",
-                height: "100%",
-                width: "100%",
-                marginTop: 15,
               }}
             >
+              <TouchableOpacity
+                style={{
+                  margin: 3,
+                  marginLeft: 15,
+                }}
+                onPress={() => setSelectedApps([])}
+              >
+                <Entypo name="cross" size={25} color="#9c9696" />
+              </TouchableOpacity>
+
               <View
                 style={{
                   borderRadius: 9,
@@ -179,6 +256,7 @@ const TabLayout = () => {
                   backgroundColor: "#08723d",
                   justifyContent: "center",
                   alignItems: "center",
+                  marginTop: 10,
                 }}
               >
                 <Text
@@ -190,152 +268,54 @@ const TabLayout = () => {
                     color: "white",
                   }}
                 >
-                  SEND
+                  SEND ({selectedApps.length})
                 </Text>
               </View>
-            </View>
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="DELETE"
-        listeners={({ navigation }) => ({
-          tabPress: (e) => {
-            // navigation.jumpTo("index");
-            Alert.alert("Hey Pal", "It's Your Turn");
-
-            e.preventDefault();
-          },
-        })}
-        component={Tomp3}
-        options={{
-          tabBarIcon: () => (
-            <View
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                height: "100%",
-                width: "100%",
-                marginTop: 10,
-                marginLeft: 65,
-              }}
-            >
-              <FontAwesome5 name="trash" size={24} color="#9c9696" />
-            </View>
-          ),
-        }}
-      />
-    </Tab.Navigator>
-  ) : (
-    <Tab.Navigator
-      screenOptions={{
-        tabBarShowLabel: false,
-        tabBarStyle: [styles.tabBar],
-        headerStyle: styles.header,
-        headerTitleStyle: styles.headerTitle,
-        headerTitleAlign: "center",
-      }}
-      initialRouteName="index"
-    >
-      <Tab.Screen
-        name="PLAYLIST"
-        component={Playlist}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <TabIcon icon={icons.playlist} focused={focused} title="PLAYLIST" />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="TOMP3"
-        component={Tomp3}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <TabIcon icon={icons.toMp3} focused={focused} title="TOMP3" />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="index"
-        listeners={({ navigation }) => ({
-          focus: () => navigation.jumpTo("index"),
-          tabPress: (e) => {
-            navigation.jumpTo("index");
-
-            if (isOpened.current) {
-              transYSend.value = withTiming(0, {
-                duration: DURATION,
-              });
-            } else {
-              transYSend.value = withTiming(TRANSLATE_Y, {
-                duration: DURATION,
-              });
-              transYUpload.value = withTiming(TRANSLATE_Y, {
-                duration: DURATION,
-              });
-            }
-
-            isOpened.current = !isOpened.current;
-
-            e.preventDefault();
-          },
-        })}
-        component={Home}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ focused }) => (
-            <>
-              <TabIcon
-                icon={icons.shuffle}
-                focused={focused}
-                title=""
-                isCenterTab={true}
-              />
-              <AnimatedPressable
-                style={[styles.sendButton, rSendAnimatedStyles]}
-                onPress={() => {
-                  Alert.alert("Sending!", "You Clicked Send");
+              <TouchableOpacity
+                style={{
+                  margin: 10,
                 }}
+                onPress={() =>
+                  Alert.alert("", "Delete selected items", [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed"),
+                      style: "cancel",
+                    },
+                    { text: "OK", onPress: () => console.log("OK Pressed") },
+                  ])
+                }
               >
-                <Feather name="send" size={28} color="white" />
-                <Text style={{ color: "white", marginLeft: 5 }}>SEND</Text>
-              </AnimatedPressable>
-              <AnimatedPressable
-                style={[styles.dowloadButton, rDownloadAnimatedStyles]}
-                onPress={() => {
-                  Alert.alert("Download", "You Clicked Download");
-                }}
-              >
-                <FontAwesome name="download" size={28} color="white" />
-                <Text style={{ color: "white", marginLeft: 5 }}>RECEIVE</Text>
-              </AnimatedPressable>
-            </>
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="SOCIAL"
-        component={Social}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <TabIcon icon={icons.social} focused={focused} title="SOCIAL" />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="ME"
-        component={Profile}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <TabIcon icon={icons.profile} focused={focused} title="ME" />
-          ),
-        }}
-      />
-    </Tab.Navigator>
+                <FontAwesome5 name="trash" size={20} color="#9c9696" />
+              </TouchableOpacity>
+            </View>
+          </Animated.View>
+        </Portal>
+      )}
+    </>
   );
 };
 
 const styles = StyleSheet.create({
+  sliderModal: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 60,
+    backgroundColor: "white",
+    borderRadius: 5,
+    borderWidth: 0.1,
+    zIndex: 1000,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 5,
+  },
   tabBar: {
     backgroundColor: "#f8f9fa",
     borderTopColor: "#0061FF1A",
@@ -387,7 +367,7 @@ const styles = StyleSheet.create({
     borderColor: "#f8f9fa",
   },
   centerTabBackgroundFocused: {
-    backgroundColor: "#044b33", // Slightly darker when focused
+    backgroundColor: "#044b33",
   },
   centerTabIcon: {
     width: 28,
@@ -421,8 +401,6 @@ const styles = StyleSheet.create({
     padding: 9,
     backgroundColor: "#066341",
     borderRadius: 30,
-    // borderWidth: 4,
-    // borderColor: "#f4fdfd",
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
