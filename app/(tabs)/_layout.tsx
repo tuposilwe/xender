@@ -5,7 +5,7 @@ import Feather from "@expo/vector-icons/Feather";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   Alert,
   Image,
@@ -83,25 +83,24 @@ const TabLayout = () => {
 
   const Tab = createBottomTabNavigator();
   const isOpened = useRef(false);
+  const [opened, setOpened] = useState(false);
+
   const transYSend = useSharedValue(0);
   const transYUpload = useSharedValue(0);
-  const rSendAnimatedStyles = useAnimatedStyle(() => {
-    return {
-      transform: [
-        { translateY: transYSend.value },
-        { scale: interpolate(transYSend.value, [TRANSLATE_Y, 0], [1, 0]) },
-      ],
-    };
-  }, []);
 
-  const rReceiveAnimatedStyles = useAnimatedStyle(() => {
-    return {
-      transform: [
-        { translateY: transYSend.value },
-        { scale: interpolate(transYSend.value, [TRANSLATE_Y, 0], [1, 0]) },
-      ],
-    };
-  }, []);
+  const rSendAnimatedStyles = useAnimatedStyle(() => ({
+    transform: [
+      { translateY: transYSend.value },
+      { scale: interpolate(transYSend.value, [TRANSLATE_Y, 0], [1, 0]) },
+    ],
+  }));
+
+  const rReceiveAnimatedStyles = useAnimatedStyle(() => ({
+    transform: [
+      { translateY: transYUpload.value },
+      { scale: interpolate(transYUpload.value, [TRANSLATE_Y, 0], [1, 0]) },
+    ],
+  }));
 
   return (
     <>
@@ -145,24 +144,24 @@ const TabLayout = () => {
               navigation.jumpTo("index");
 
               if (isOpened.current) {
-                // Close animations
                 transYSend.value = withTiming(0, { duration: DURATION });
                 transYUpload.value = withTiming(0, { duration: DURATION });
+                setOpened(false);
               } else {
-                // Open animations
                 transYSend.value = withTiming(TRANSLATE_Y, {
                   duration: DURATION,
                 });
                 transYUpload.value = withTiming(TRANSLATE_Y, {
                   duration: DURATION,
                 });
+                setOpened(true);
 
-                // Auto-close after 2 seconds
                 setTimeout(() => {
                   if (isOpened.current) {
                     transYSend.value = withTiming(0, { duration: DURATION });
                     transYUpload.value = withTiming(0, { duration: DURATION });
                     isOpened.current = false;
+                    setOpened(false);
                   }
                 }, 3000);
               }
@@ -175,32 +174,12 @@ const TabLayout = () => {
           options={{
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-              <>
-                <TabIcon
-                  icon={icons.shuffle}
-                  focused={focused}
-                  title=""
-                  isCenterTab={true}
-                />
-                <AnimatedPressable
-                  style={[styles.sendButton, rSendAnimatedStyles]}
-                  onPress={() => {
-                    Alert.alert("Sending!", "You Clicked Send");
-                  }}
-                >
-                  <Feather name="send" size={28} color="white" />
-                  <Text style={{ color: "white", marginLeft: 5 }}>SEND</Text>
-                </AnimatedPressable>
-                <AnimatedPressable
-                  style={[styles.dowloadButton, rReceiveAnimatedStyles]}
-                  onPress={() => {
-                    Alert.alert("Download", "You Clicked Download");
-                  }}
-                >
-                  <FontAwesome name="download" size={28} color="white" />
-                  <Text style={{ color: "white", marginLeft: 5 }}>RECEIVE</Text>
-                </AnimatedPressable>
-              </>
+              <TabIcon
+                icon={icons.shuffle}
+                focused={focused}
+                title=""
+                isCenterTab={true}
+              />
             ),
           }}
         />
@@ -224,6 +203,27 @@ const TabLayout = () => {
         />
       </Tab.Navigator>
 
+      {/* Send & Receive Buttons Outside tabBarIcon */}
+      {opened && (
+        <>
+          <AnimatedPressable
+            style={[styles.sendButton, rSendAnimatedStyles]}
+            onPress={() => Alert.alert("Sending!", "You Clicked Send")}
+          >
+            <Feather name="send" size={28} color="white" />
+            <Text style={{ color: "white", marginLeft: 5 }}>SEND</Text>
+          </AnimatedPressable>
+          <AnimatedPressable
+            style={[styles.dowloadButton, rReceiveAnimatedStyles]}
+            onPress={() => Alert.alert("Download", "You Clicked Download")}
+          >
+            <FontAwesome name="download" size={28} color="white" />
+            <Text style={{ color: "white", marginLeft: 5 }}>RECEIVE</Text>
+          </AnimatedPressable>
+        </>
+      )}
+
+      {/* Bottom Slide Panel */}
       {selectedApps.length > 0 && (
         <Portal>
           <Animated.View
@@ -239,10 +239,7 @@ const TabLayout = () => {
               }}
             >
               <TouchableOpacity
-                style={{
-                  margin: 3,
-                  marginLeft: 15,
-                }}
+                style={{ margin: 3, marginLeft: 15 }}
                 onPress={() => setSelectedApps([])}
               >
                 <Entypo name="cross" size={25} color="#9c9696" />
@@ -271,17 +268,12 @@ const TabLayout = () => {
                   SEND ({selectedApps.length})
                 </Text>
               </View>
+
               <TouchableOpacity
-                style={{
-                  margin: 10,
-                }}
+                style={{ margin: 10 }}
                 onPress={() =>
                   Alert.alert("", "Delete selected items", [
-                    {
-                      text: "Cancel",
-                      onPress: () => console.log("Cancel Pressed"),
-                      style: "cancel",
-                    },
+                    { text: "Cancel", style: "cancel" },
                     { text: "OK", onPress: () => console.log("OK Pressed") },
                   ])
                 }
@@ -391,8 +383,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    left: -89,
-    zIndex: -1,
+    bottom: 0,
+    left: 70,
+    zIndex: 100,
   },
   dowloadButton: {
     flexDirection: "row",
@@ -404,8 +397,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    left: 20,
-    zIndex: -1,
+    bottom: 0,
+    right: 70,
+    zIndex: 100,
   },
 });
 
