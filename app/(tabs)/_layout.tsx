@@ -78,7 +78,7 @@ const DURATION = 200;
 const TRANSLATE_Y = -100;
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-const TabLayout = () => {
+const TabLayout = ({ navigation }: any) => {
   const { selectedApps, screen, setSelectedApps } = useSelectedApps();
 
   const Tab = createBottomTabNavigator();
@@ -215,7 +215,7 @@ const TabLayout = () => {
           </AnimatedPressable>
           <AnimatedPressable
             style={[styles.dowloadButton, rReceiveAnimatedStyles]}
-            onPress={() => Alert.alert("Download", "You Clicked Download")}
+            onPress={() => navigation.navigate("Preparations")}
           >
             <FontAwesome name="download" size={28} color="white" />
             <Text style={{ color: "white", marginLeft: 5 }}>RECEIVE</Text>

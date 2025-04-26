@@ -7,6 +7,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import TabLayout from "./(tabs)/_layout";
 import { PaperProvider } from "react-native-paper";
+import MyStack from "./(stacks)/MyStack";
 
 export default function RootLayout() {
   // This is the default configuration
@@ -20,7 +21,7 @@ export default function RootLayout() {
       <StatusBar style="light" backgroundColor="#066341" />
       <AlertNotificationRoot>
         <PaperProvider>
-          <TabLayout />
+          <MyStack/>
         </PaperProvider>
       </AlertNotificationRoot>
     </SafeAreaView>
