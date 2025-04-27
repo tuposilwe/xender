@@ -1,28 +1,24 @@
 import { useNetworkAndLocation } from "@/hooks/useNetworkAndLocation";
+import Entypo from "@expo/vector-icons/Entypo";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { ActivityAction, startActivityAsync } from "expo-intent-launcher";
 import React, { useState } from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import Entypo from "@expo/vector-icons/Entypo";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
-const Preparations = () => {
+const Preparations = ({ navigation }: any) => {
   const [chev, setChev] = useState(false);
   const [chev2, setChev2] = useState(false);
 
+
+
   const { wifiEnabled, gpsEnabled } = useNetworkAndLocation();
 
-  console.log("Wifi:", wifiEnabled, "GPS:", gpsEnabled);
+  // console.log("Wifi:", wifiEnabled, "GPS:", gpsEnabled);
 
   return (
-    <View
-      style={
-        {
-          // gap: 20,
-        }
-      }
-    >
+    <View>
       <View
         style={{
           flexDirection: "row",
@@ -247,6 +243,8 @@ const Preparations = () => {
           backgroundColor: wifiEnabled && gpsEnabled ? "#066341" : "#c2c2c2",
         }}
         disabled={wifiEnabled && gpsEnabled ? false : true}
+
+        onPress={() => navigation.navigate("Scanner")}
       >
         <Text
           style={{
