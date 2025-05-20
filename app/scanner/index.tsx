@@ -1,5 +1,6 @@
+import TorchState from "@britishgas-engineering/bg-react-native-torch";
 import { CameraView, useCameraPermissions } from "expo-camera";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
   AppState,
@@ -7,10 +8,13 @@ import {
   Pressable,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 const Scanner = () => {
+  const [torch, setTorch] = useState(false);
   const [permission, requestPermission] = useCameraPermissions();
   const qrLock = useRef(false);
   const appState = useRef(AppState.currentState);
@@ -35,6 +39,22 @@ const Scanner = () => {
   useEffect(() => {
     startAnimation();
   }, []);
+
+  const getTorch = () => {
+  
+    TorchState.setEnabledState(torch)
+   console.log("My Torch: ",torch);
+   
+  }
+
+  useEffect(() => {
+
+  getTorch()
+
+  return () => {
+    getTorch()
+  }
+  }, [getTorch]);
 
   const startAnimation = () => {
     animatedValue.setValue(0);
@@ -114,6 +134,21 @@ const Scanner = () => {
           </Text>
         </Pressable>
       )}
+
+      <TouchableOpacity
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: "100%",
+        }}
+        onPress={() => setTorch(!torch)}
+      >
+        {torch ? (
+          <MaterialIcons name="flashlight-on" size={64} color="black" />
+        ) : (
+          <MaterialIcons name="flashlight-off" size={64} color="black" />
+        )}
+      </TouchableOpacity>
     </View>
   );
 };
