@@ -68,11 +68,11 @@ const File = () => {
             <Progress.Bar
               progress={usedPercent}
               width={null}
-              color="#0e640e"
+              color="#b9414b"
               unfilledColor="#e0e0e0"
               borderRadius={8}
               borderWidth={0}
-              height={10}
+              height={5}
               style={styles.progress}
             />
           </View>
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     marginVertical: 2,
   },
   progress: {
-    marginTop: 16,
+    marginTop: 10,
   },
   textAvailable: {
     fontSize: 16,
