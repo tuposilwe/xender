@@ -57,8 +57,7 @@
           "supportsPictureInPicture": true
         }
       ],
-      "expo-audio",
-      "expo-barcode-scanner"
+      "expo-audio"
     ],
     "experiments": {
       "typedRoutes": true

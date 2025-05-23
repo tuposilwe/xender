@@ -7,7 +7,7 @@ import { ActivityAction, startActivityAsync } from "expo-intent-launcher";
 import React, { useEffect, useState } from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import Device from "@react-native-tethering/hotspot";
-import TorchState from "@britishgas-engineering/bg-react-native-torch"
+
 
 
 

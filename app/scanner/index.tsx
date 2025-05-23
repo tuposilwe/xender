@@ -1,4 +1,4 @@
-import TorchState from "@britishgas-engineering/bg-react-native-torch";
+
 import { CameraView, useCameraPermissions } from "expo-camera";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -42,7 +42,7 @@ const Scanner = () => {
 
   const getTorch = () => {
   
-    TorchState.setEnabledState(torch)
+    // TorchState.setEnabledState(torch)
    console.log("My Torch: ",torch);
    
   }
