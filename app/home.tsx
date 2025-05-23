@@ -1,5 +1,6 @@
+import Header from "@/components/Header";
+import { HEADER_HEIGHT } from "@/constants/height";
 import React from "react";
-import { Alert, Pressable, StyleSheet, Text } from "react-native";
 import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
 import App from "./screens/app";
 import Download from "./screens/download";
@@ -8,19 +9,6 @@ import History from "./screens/history";
 import Music from "./screens/music";
 import Photo from "./screens/photo";
 import Video from "./screens/video";
-
-const HEADER_HEIGHT = 70;
-
-const Header = () => {
-  return (
-    <Pressable
-      onPress={() => Alert.alert("Header Clicked! ")}
-      style={[styles.header, { height: HEADER_HEIGHT }]}
-    >
-      <Text className="flex">Header Goes Here</Text>
-    </Pressable>
-  );
-};
 
 const Home = () => {
   return (
@@ -89,12 +77,5 @@ const Home = () => {
     </Tabs.Container>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    width: "100%",
-    backgroundColor: "#066341",
-  },
-});
 
 export default Home;

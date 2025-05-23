@@ -3,6 +3,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import TabLayout from "../(tabs)/_layout";
 import Scanner from "../scanner";
+import DrawerLayout from "../(drawer)/_layout";
+import Header from "@/components/Header";
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +32,26 @@ const MyStack = () => {
       <Stack.Screen
         name="Scanner"
         component={Scanner}
+        options={{
+          headerShown: true,
+          headerTransparent: true, // Make header transparent
+           headerTitle: "", // Optional: hide title if you want only back button
+           headerTintColor: "#fff", // Make the back button white (for better visibility over camera)
+        }}
+      />
+        <Stack.Screen
+        name="MY_Header"
+        component={Header}
+        options={{
+          headerShown: true,
+          headerTransparent: true, // Make header transparent
+           headerTitle: "", // Optional: hide title if you want only back button
+           headerTintColor: "#fff", // Make the back button white (for better visibility over camera)
+        }}
+      />
+       <Stack.Screen
+        name="Drawer"
+        component={DrawerLayout}
         options={{
           headerShown: true,
           headerTransparent: true, // Make header transparent

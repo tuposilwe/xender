@@ -1,5 +1,4 @@
-
-import { CameraView, useCameraPermissions } from "expo-camera";
+import { CameraView, useCameraPermissions, FlashMode } from "expo-camera";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
@@ -14,7 +13,7 @@ import {
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 const Scanner = () => {
-  const [torch, setTorch] = useState(false);
+  const [flashMode, setFlashMode] = useState<FlashMode>("off");
   const [permission, requestPermission] = useCameraPermissions();
   const qrLock = useRef(false);
   const appState = useRef(AppState.currentState);
@@ -40,22 +39,6 @@ const Scanner = () => {
     startAnimation();
   }, []);
 
-  const getTorch = () => {
-  
-    // TorchState.setEnabledState(torch)
-   console.log("My Torch: ",torch);
-   
-  }
-
-  useEffect(() => {
-
-  getTorch()
-
-  return () => {
-    getTorch()
-  }
-  }, [getTorch]);
-
   const startAnimation = () => {
     animatedValue.setValue(0);
     Animated.loop(
@@ -76,27 +59,32 @@ const Scanner = () => {
 
   const isPermissionGranted = Boolean(permission?.granted);
 
-  // console.log("permission: ", isPermissionGranted);
-
   const translateY = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, 250], // size of the focusBox
+    outputRange: [0, 250],
   });
 
+  const toggleFlashMode = () => {
+    setFlashMode((prev) => (prev === "on" ? "off" : "on"));
+  };
+
   return (
-    <View style={StyleSheet.absoluteFillObject}>
-      <CameraView
-        style={StyleSheet.absoluteFillObject}
-        facing="back"
-        onBarcodeScanned={({ data }) => {
-          if (data && !qrLock.current) {
-            qrLock.current = true;
-            setTimeout(async () => {
-              await Linking.openURL(data);
-            }, 500);
-          }
-        }}
-      />
+    <View style={{ flex: 1 }}>
+      {isPermissionGranted && (
+        <CameraView
+          style={StyleSheet.absoluteFill}
+          facing="back"
+          flash={flashMode}
+          onBarcodeScanned={({ data }) => {
+            if (data && !qrLock.current) {
+              qrLock.current = true;
+              setTimeout(async () => {
+                await Linking.openURL(data);
+              }, 500);
+            }
+          }}
+        />
+      )}
 
       {/* Overlay */}
       <View style={styles.overlay}>
@@ -104,14 +92,8 @@ const Scanner = () => {
         <View style={styles.overlayCenterRow}>
           <View style={styles.overlayBackground} />
           <View style={styles.focusBox}>
-            {/* Animated sliding line */}
             <Animated.View
-              style={[
-                styles.scanLine,
-                {
-                  transform: [{ translateY }],
-                },
-              ]}
+              style={[styles.scanLine, { transform: [{ translateY }] }]}
             />
           </View>
           <View style={styles.overlayBackground} />
@@ -119,35 +101,22 @@ const Scanner = () => {
         <View style={styles.overlayBackground} />
       </View>
 
-      {/* If no permission */}
+      {/* No Permission */}
       {!isPermissionGranted && (
-        <Pressable
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop: "100%",
-          }}
-          onPress={requestPermission}
-        >
+        <Pressable style={styles.permissionPrompt} onPress={requestPermission}>
           <Text style={styles.buttonStyle}>
             We need your permission to show the camera
           </Text>
         </Pressable>
       )}
 
-      <TouchableOpacity
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: "100%",
-        }}
-        onPress={() => setTorch(!torch)}
-      >
-        {torch ? (
-          <MaterialIcons name="flashlight-on" size={64} color="black" />
-        ) : (
-          <MaterialIcons name="flashlight-off" size={64} color="black" />
-        )}
+      {/* Flash Toggle Button */}
+      <TouchableOpacity style={styles.flashButton} onPress={toggleFlashMode}>
+        <MaterialIcons
+          name={flashMode === "on" ? "flashlight-on" : "flashlight-off"}
+          size={64}
+          color="white"
+        />
       </TouchableOpacity>
     </View>
   );
@@ -156,17 +125,6 @@ const Scanner = () => {
 export default Scanner;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    backgroundColor: "black",
-    justifyContent: "space-around",
-    paddingVertical: 80,
-  },
-  title: {
-    color: "white",
-    fontSize: 40,
-  },
   buttonStyle: {
     color: "#066341",
     fontSize: 20,
@@ -179,7 +137,7 @@ const styles = StyleSheet.create({
   },
   overlayBackground: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.6)", // dark overlay
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
     width: "100%",
   },
   overlayCenterRow: {
@@ -198,5 +156,17 @@ const styles = StyleSheet.create({
     height: 2,
     backgroundColor: "#066341",
     position: "absolute",
+  },
+  flashButton: {
+    position: "absolute",
+    bottom: 40,
+    alignSelf: "center",
+  },
+  permissionPrompt: {
+    position: "absolute",
+    bottom: 100,
+    alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

@@ -22,6 +22,7 @@
     "@react-native-community/slider": "4.5.5",
     "@react-native-tethering/hotspot": "^1.0.0",
     "@react-navigation/bottom-tabs": "^7.2.0",
+    "@react-navigation/drawer": "^7.3.2",
     "@react-navigation/native": "^7.0.14",
     "expo": "~52.0.46",
     "expo-audio": "~0.3.5",

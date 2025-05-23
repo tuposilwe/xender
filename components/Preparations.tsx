@@ -8,9 +8,6 @@ import React, { useEffect, useState } from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import Device from "@react-native-tethering/hotspot";
 
-
-
-
 const Preparations = ({ navigation }: any) => {
   const [chev, setChev] = useState(false);
   const [chev2, setChev2] = useState(false);
@@ -18,11 +15,11 @@ const Preparations = ({ navigation }: any) => {
   const stat = Device.isHotspotEnabled;
   console.log("Hello There: ", stat);
 
- 
-
   const { wifiEnabled, gpsEnabled } = useNetworkAndLocation();
 
   // console.log("Wifi:", wifiEnabled, "GPS:", gpsEnabled);
+
+   
 
   return (
     <View>
