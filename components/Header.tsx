@@ -1,7 +1,7 @@
 import { HEADER_HEIGHT } from "@/constants/height";
 import Entypo from "@expo/vector-icons/Entypo";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import { useNavigation } from "@react-navigation/native";
+import { DrawerActions, useNavigation } from "@react-navigation/native";
 import React from "react";
 import {
   StyleSheet,
@@ -14,7 +14,7 @@ const Header = () => {
 
   return (
     <View style={[styles.header, { height: HEADER_HEIGHT }]}>
-      <TouchableOpacity onPress={() => navigation.openDrawer()}>
+      <TouchableOpacity onPress={() => navigation.getParent()?.dispatch(DrawerActions.openDrawer())}>
         <Entypo name="dots-three-vertical" style={{}} size={25} color="white" />
       </TouchableOpacity>
       <FontAwesome6 name="bars" size={25} color="white" />

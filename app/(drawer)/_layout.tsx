@@ -1,7 +1,7 @@
-import React from "react";
 import CustomDrawerContent from "@/components/CustomDrawerContent";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import TabLayout from "../(tabs)/_layout";
+import React from "react";
+import MyStack from "../(stacks)/MainStack";
 
 const Drawer = createDrawerNavigator();
 
@@ -19,7 +19,7 @@ const DrawerLayout = () => {
     >
       <Drawer.Screen
         name="xender"
-        component={TabLayout}
+        component={MyStack}
         options={{
           drawerItemStyle: { display: "none" },
         }}
@@ -31,12 +31,12 @@ const DrawerLayout = () => {
         options={{
           title: "Language",
           drawerLabel: "Language",
-
+          
           drawerIcon: ({ size, color }) => (
             <MaterialIcons name="person-outline" size={size} color={color} />
-          ),
-        }}
-      /> */}
+            ),
+            }}
+            /> */}
     </Drawer.Navigator>
   );
 };
