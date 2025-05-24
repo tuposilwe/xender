@@ -3,21 +3,21 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import React from "react";
 import MyStack from "../(stacks)/MainStack";
 
-
 const Drawer = createDrawerNavigator();
 
 const DrawerLayout = () => {
-
-
   return (
     <Drawer.Navigator
       backBehavior="history"
-      screenOptions={({ navigation }) => ({
+      screenOptions={() => ({
         drawerType: "front",
         swipeEnabled: true,
         swipeEdgeWidth: 10,
         headerShown: false,
+        borderRightWidth: 0,
+        drawerStyle: { borderRadius: 0 }
       })}
+    
       drawerContent={CustomDrawerContent}
     >
       <Drawer.Screen

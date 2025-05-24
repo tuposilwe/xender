@@ -3,17 +3,17 @@ import Entypo from "@expo/vector-icons/Entypo";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { ActivityAction, startActivityAsync } from "expo-intent-launcher";
-import React, { useEffect, useState } from "react";
-import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import Device from "@react-native-tethering/hotspot";
+import { ActivityAction, startActivityAsync } from "expo-intent-launcher";
+import React, { useState } from "react";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
 
 const Preparations = ({ navigation }: any) => {
   const [chev, setChev] = useState(false);
   const [chev2, setChev2] = useState(false);
 
   const stat = Device.isHotspotEnabled;
-  console.log("Hello There: ", stat);
+  // console.log("Hello There: ", stat);
 
   const { wifiEnabled, gpsEnabled } = useNetworkAndLocation();
 

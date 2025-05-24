@@ -8,7 +8,7 @@ export function useNetworkAndLocation() {
 
   const checkLocationStatus = useCallback(async () => {
     const enabled = await DeviceInfo.isLocationEnabled();
-    console.log("GPS enabled:", enabled);
+    // console.log("GPS enabled:", enabled);
     setGpsEnabled(enabled);
     return enabled;
   }, []);
@@ -16,7 +16,7 @@ export function useNetworkAndLocation() {
   useEffect(() => {
     // Listen for WiFi changes
     const unsubscribeNetInfo = NetInfo.addEventListener(state => {
-      console.log("WiFi changed:", state.isWifiEnabled);
+      // console.log("WiFi changed:", state.isWifiEnabled);
       setWifiEnabled(state.isWifiEnabled ?? false);
       // Also check GPS when WiFi changes
       checkLocationStatus();
