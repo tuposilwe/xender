@@ -3,9 +3,12 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import React from "react";
 import MyStack from "../(stacks)/MainStack";
 
+
 const Drawer = createDrawerNavigator();
 
 const DrawerLayout = () => {
+
+
   return (
     <Drawer.Navigator
       backBehavior="history"
