@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import TabLayout from "../(tabs)/_layout";
 import Scanner from "../scanner";
+import Receiver from "@/components/Receiver";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,18 @@ const MyStack = () => {
         }}
         name="Preparations"
         component={Preparations}
+      />
+      <Stack.Screen
+        options={{
+          headerStyle: { backgroundColor: "#066341" },
+          headerTitleStyle: {
+            color: "white",
+          },
+
+          headerTintColor: "white",
+        }}
+        name="Receiver"
+        component={Receiver}
       />
 
       <Stack.Screen

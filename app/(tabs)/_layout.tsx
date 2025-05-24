@@ -29,6 +29,7 @@ import Home from "../home";
 import Playlist from "./playlist";
 import Social from "./social";
 import Tomp3 from "./tomp3";
+import { useNavigation } from "@react-navigation/native";
 
 const TabIcon = ({
   focused,
@@ -79,6 +80,8 @@ const TRANSLATE_Y = -100;
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const TabLayout = ({ navigation }: any) => {
+  const navigationMy = useNavigation();
+
   const { selectedApps, screen, setSelectedApps } = useSelectedApps();
 
   const Tab = createBottomTabNavigator();
@@ -208,7 +211,7 @@ const TabLayout = ({ navigation }: any) => {
         <>
           <AnimatedPressable
             style={[styles.sendButton, rSendAnimatedStyles]}
-            onPress={() => Alert.alert("Sending!", "You Clicked Send")}
+            onPress={() => navigation.navigate("Receiver")}
           >
             <Feather name="send" size={28} color="white" />
             <Text style={{ color: "white", marginLeft: 5 }}>SEND</Text>
