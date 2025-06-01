@@ -8,7 +8,6 @@ import {
 } from "react-native-reanimated";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import DrawerLayout from "./(drawer)/_layout";
-import BLE from "@/components/BLE";
 
 export default function RootLayout() {
   // This is the default configuration
@@ -21,10 +20,10 @@ export default function RootLayout() {
     <GestureHandlerRootView>
       <SafeAreaView style={{ flex: 1 }}>
         <SafeAreaProvider>
-          <StatusBar style="light" backgroundColor="#d45252" />
+          <StatusBar style="light" backgroundColor="#066341" />
           <AlertNotificationRoot>
             <PaperProvider>
-              <BLE/>
+              <DrawerLayout />
             </PaperProvider>
           </AlertNotificationRoot>
         </SafeAreaProvider>
