@@ -57,6 +57,15 @@
           "supportsPictureInPicture": true
         }
       ],
+       [
+        "react-native-ble-plx",
+        {
+          "isBackgroundEnabled": true,
+          "modes": ["peripheral", "central"],
+          "bluetoothAlwaysPermission": "Allow HeartRate to connect to bluetooth devices"
+        }
+      ]
+      ,
       "expo-audio"
     ],
     "experiments": {

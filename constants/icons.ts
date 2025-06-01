@@ -6,6 +6,7 @@ import playlist from "@/assets/icons/play_list_2_fill_icon.png";
 import xender from "@/assets/images/xender.png";
 import eject_up from "@/assets/icons/eject-up.png"
 import eject_down from "@/assets/icons/eject-down.png"
+import heart from "@/img/heart.png"
 
 
 export default {
@@ -16,5 +17,6 @@ export default {
     playlist,
     xender,
     eject_up,
-    eject_down
+    eject_down,
+    heart
 }
